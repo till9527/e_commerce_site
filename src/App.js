@@ -7,7 +7,7 @@ import { fetchUserAttributes } from '@aws-amplify/auth';
 
 Amplify.configure(awsExports);
 
-function App({ signOut, user }) {
+function App({ signOut, user, onSignOut }) {
   const [isAdmin, setIsAdmin] = useState(false);
 
   useEffect(() => {
@@ -32,17 +32,18 @@ function App({ signOut, user }) {
     checkAdmin();
   }, []); // Empty dependency array to run only once on component mount
 
+  const handleSignOutClick = async () => {
+    await signOut(); // Sign out the user
+    onSignOut(); // Redirect to the landing page
+  };
+
   return (
     <>
       <h1>Hello {user.username}</h1>
       <p>Status: {isAdmin ? 'Admin' : 'Not Admin'}</p>
-      <button onClick={signOut}>Sign out</button>
+      <button onClick={handleSignOutClick}>Sign out</button>
     </>
   );
 }
 
 export default withAuthenticator(App);
-
-
-
-
